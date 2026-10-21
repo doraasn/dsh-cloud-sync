@@ -1,0 +1,6 @@
+# dsh-cloud-sync: 把 DSH 可移植配置（技能 / 插件 / MCP / 指令 / 可选凭据）同步到任意 WebDAV。
+# 行 id 同时是设置命名空间（dsh-settings 用 entry id 做 ns）。
+- insert:
+    - id: cloud-sync
+      name: '@local/dsh-cloud-sync'
+      config: {}

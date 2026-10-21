@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="36" height="36" role="img" aria-label="Cloud Sync">
+  <path d="M11.5 25.5a5.5 5.5 0 0 1-.6-10.97A7.5 7.5 0 0 1 25.4 13.6a5.75 5.75 0 0 1-.9 11.9z"
+        fill="none" stroke="#247bbf" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M18 22.5V14m0 0-3.2 3.2M18 14l3.2 3.2" fill="none" stroke="#247bbf" stroke-width="2.2"
+        stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

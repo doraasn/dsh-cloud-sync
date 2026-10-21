@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "云同步",
+    "description": "把技能、插件、MCP 服务器配置、全局指令与可选凭据备份到任意 WebDAV（坚果云 / Nextcloud / 群晖 / ownCloud / AList），并可拉取恢复。"
+  }
+}
