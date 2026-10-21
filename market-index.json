@@ -43,7 +43,7 @@
   },
   "plugins": [
     {
-      "name": "@local/dsh-cloud-sync",
+      "name": "dsh-cloud-sync",
       "title": {
         "zh": "云同步",
         "en": "Cloud Sync"
@@ -71,17 +71,17 @@
           "no-deps"
         ],
         "sortKeys": {
-          "added": 1792581696
+          "added": 1792587323
         }
       },
       "versions": [
         {
           "version": "0.1.0",
-          "publishTimestamp": 1792581696,
+          "publishTimestamp": 1792587323,
           "source": {
             "type": "git",
             "url": "https://github.com/doraasn/dsh-cloud-sync.git",
-            "commit": "c03b66e8ea4a07d7904cd26b162438ed430816da"
+            "commit": "9b3a3bc49296b5d6c704b95137eafa0fb372ba15"
           },
           "engines": {
             "dsh": ">=0.2.1-0"
