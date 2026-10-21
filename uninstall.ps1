@@ -2,8 +2,12 @@
 param([string]$Profile = 'desktop')
 
 $ErrorActionPreference = 'Stop'
-$dsh = (Get-Command dsh -ErrorAction SilentlyContinue)?.Source
-if (-not $dsh) { $dsh = 'C:\Users\<you>\AppData\Local\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd' }
+$dshCmd = Get-Command dsh -ErrorAction SilentlyContinue
+if ($dshCmd) {
+  $dsh = $dshCmd.Source
+} else {
+  $dsh = Join-Path $env:LOCALAPPDATA 'Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd'
+}
 
 $running = Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match 'DeepSeek' }
 if ($running) {

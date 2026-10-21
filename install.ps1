@@ -5,8 +5,12 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$dsh = (Get-Command dsh -ErrorAction SilentlyContinue)?.Source
-if (-not $dsh) { $dsh = 'C:\Users\<you>\AppData\Local\Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd' }
+$dshCmd = Get-Command dsh -ErrorAction SilentlyContinue
+if ($dshCmd) {
+  $dsh = $dshCmd.Source
+} else {
+  $dsh = Join-Path $env:LOCALAPPDATA 'Programs\DeepSeek Harness\resources\runtime\cli\bin\dsh.cmd'
+}
 
 if (-not (Test-Path $dsh)) { throw "找不到 dsh CLI：$dsh" }
 if (-not (Test-Path (Join-Path $PluginDir 'package.json'))) { throw "插件目录不对：$PluginDir" }
@@ -40,5 +44,5 @@ if ($bundles -notcontains 'dsh-cloud-sync') {
 }
 
 Write-Host "`n✅ 安装完成。重启 DSH 后在任意会话执行：" -ForegroundColor Green
-Write-Host "   /nsync secret <WebDAV 应用密码>"
-Write-Host "   /nsync status"
+Write-Host "   /csync secret <WebDAV 应用密码>"
+Write-Host "   /csync status"

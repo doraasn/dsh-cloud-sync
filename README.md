@@ -18,7 +18,7 @@
 ## 安全模型
 
 - 默认**不含任何明文密钥**：`Authorization: Bearer xxx` 一律打码成 `Bearer __SECRET__`，`mcp/`、`.env`、`*credential*` 里的 `key = value` 也只在值"像真密钥"时打码（长度 ≥ 16、无 `$ % < {`）。
-- 打码过的位置记在 `manifest.json` 的 `placeholders` 里，`/nsync pull` 会列出"需要重填"。
+- 打码过的位置记在 `manifest.json` 的 `placeholders` 里，`/csync pull` 会列出"需要重填"。
 - **恢复保护**：若本地文件已有真实密钥、而归档里只有 `__SECRET__` 占位符，该文件判为"密钥保护跳过"，**不会覆盖**本地真密钥（计划里显示为 `🔒`，不参与落盘）。
 - 开启 `includeSecrets` 时，`.credentials.yaml` 以 **scrypt + AES-256-GCM** 密文进包，口令来自凭据槽 `CLOUD_SYNC_SECRET_PASSWORD`，不落任何文件。
 - 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`，以及单文件 > 4 MB 的素材（设置页「单文件上限」可调）。
@@ -39,11 +39,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 在任意会话里：
 
 ```text
-/nsync secret <WebDAV 应用密码>         # 写入 DSH 凭据槽，不落配置文件
-/nsync config username 你的邮箱@example.com
-/nsync status                          # 看连通性与远端快照
-/nsync push --dry-run                  # 先看会打包什么，不上传
-/nsync push                            # 真正上传
+/csync secret <WebDAV 应用密码>         # 写入 DSH 凭据槽，不落配置文件
+/csync config username 你的邮箱@example.com
+/csync status                          # 看连通性与远端快照
+/csync push --dry-run                  # 先看会打包什么，不上传
+/csync push                            # 真正上传
 ```
 
 应用密码按服务生成：坚果云「账户信息 → 安全选项 → 第三方应用管理 → 添加应用密码」；Nextcloud「设置 → 安全 → 设备专用密码」；群晖用账号密码或应用专用密码。
@@ -73,15 +73,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 
 | 命令 | 作用 |
 |---|---|
-| `/nsync` / `/nsync status` | 配置、凭据槽、远端快照、上次推送总览 |
-| `/nsync config` | 打印全部配置 |
-| `/nsync config <键> <值>` | 改一项（值支持 JSON，例如 `sections '["skills","mcp"]'`） |
-| `/nsync secret <口令>` | 写入凭据槽 |
-| `/nsync push [--dry-run]` | 打包并上传，附带保留策略清理 |
-| `/nsync list` | 列远端快照 |
-| `/nsync diff [快照名]` | 下载并预演恢复计划（零写入） |
-| `/nsync pull [快照名] --yes` | 真正落盘恢复（先自动备份，失败回滚） |
-| `/nsync prune` | 按保留份数清理远端 |
+| `/csync` / `/csync status` | 配置、凭据槽、远端快照、上次推送总览 |
+| `/csync config` | 打印全部配置 |
+| `/csync config <键> <值>` | 改一项（值支持 JSON，例如 `sections '["skills","mcp"]'`） |
+| `/csync secret <口令>` | 写入凭据槽 |
+| `/csync push [--dry-run]` | 打包并上传，附带保留策略清理 |
+| `/csync list` | 列远端快照 |
+| `/csync diff [快照名]` | 下载并预演恢复计划（零写入） |
+| `/csync pull [快照名] --yes` | 真正落盘恢复（先自动备份，失败回滚） |
+| `/csync prune` | 按保留份数清理远端 |
 
 ## 配置键
 
