@@ -2,5 +2,5 @@
 # 行 id 同时是设置命名空间（dsh-settings 用 entry id 做 ns）。
 - insert:
     - id: cloud-sync
-      name: '@local/dsh-cloud-sync'
+      name: 'dsh-cloud-sync'
       config: {}

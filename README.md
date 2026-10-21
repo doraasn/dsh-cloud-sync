@@ -104,7 +104,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 ## 故障与回滚
 
 - **DSH 起不来**：启动失败弹窗第 3 个按钮「禁用第三方插件、备份 profile patch 并重启」。
-- **卸载**：退出 DSH 后执行 `uninstall.ps1`，或手工从 `~/.dsh/profiles/desktop/package.json` 删掉依赖与 `dsh.profile.bundles` 里的 `@local/dsh-cloud-sync`。
+- **卸载**：退出 DSH 后执行 `uninstall.ps1`，或手工从 `~/.dsh/profiles/desktop/package.json` 删掉依赖与 `dsh.profile.bundles` 里的 `dsh-cloud-sync`。
 - **恢复失败**：`applyRestore` 会自动回滚；恢复前的原件复制在 `$DSH_HOME/cloud-sync/backup-<时间戳>/`。
 
 ## 已知限制

@@ -10,8 +10,8 @@ if (-not $dsh) { $dsh = 'C:\Users\<you>\AppData\Local\Programs\DeepSeek Harness\
 Write-Host "== 1. profile manifest ==" -ForegroundColor Cyan
 if (-not (Test-Path $profileJson)) { Write-Host "  ❌ 找不到 $profileJson"; exit 1 }
 $manifest = Get-Content $profileJson -Raw | ConvertFrom-Json
-$hasDep = $null -ne $manifest.dependencies.'@local/dsh-cloud-sync'
-$hasBundle = @($manifest.dsh.profile.bundles) -contains '@local/dsh-cloud-sync'
+$hasDep = $null -ne $manifest.dependencies.'dsh-cloud-sync'
+$hasBundle = @($manifest.dsh.profile.bundles) -contains 'dsh-cloud-sync'
 Write-Host "  dependencies 有该包 : $hasDep"
 Write-Host "  bundles 里有该层    : $hasBundle"
 Write-Host "  当前 bundles: $(@($manifest.dsh.profile.bundles) -join ', ')"

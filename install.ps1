@@ -33,8 +33,8 @@ $manifest = Get-Content $profileJson -Raw | ConvertFrom-Json
 $bundles = $manifest.dsh.profile.bundles
 Write-Host "`nprofile bundles:"
 $bundles | ForEach-Object { Write-Host "  - $_" }
-if ($bundles -notcontains '@local/dsh-cloud-sync') {
-  Write-Host "`n⚠️ bundles 里没有 @local/dsh-cloud-sync，插件不会被加载。" -ForegroundColor Yellow
+if ($bundles -notcontains 'dsh-cloud-sync') {
+  Write-Host "`n⚠️ bundles 里没有 dsh-cloud-sync，插件不会被加载。" -ForegroundColor Yellow
   Write-Host "   手工把它加进 $profileJson 的 dsh.profile.bundles 后重启 DSH。" -ForegroundColor Yellow
   exit 2
 }

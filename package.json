@@ -1,9 +1,24 @@
 {
-  "name": "@local/dsh-cloud-sync",
+  "name": "dsh-cloud-sync",
   "version": "0.1.0",
-  "private": true,
   "type": "module",
-  "description": "Back up DSH config (skills, plugins, MCP rows, instructions, optional credentials) to any WebDAV server",
+  "description": "DeepSeek Harness plugin: back up skills, plugins, MCP config, AGENTS.md and optional encrypted credentials to any WebDAV server",
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "webdav",
+    "backup",
+    "sync"
+  ],
+  "homepage": "https://github.com/doraasn/dsh-cloud-sync",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doraasn/dsh-cloud-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doraasn/dsh-cloud-sync/issues"
+  },
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
@@ -15,7 +30,9 @@
     "lib/*.js",
     "cordis.patch.yml",
     "locale/*.json",
-    "icon.svg"
+    "icon.svg",
+    "README.md",
+    "LICENSE"
   ],
   "dsh": {
     "bundle": {

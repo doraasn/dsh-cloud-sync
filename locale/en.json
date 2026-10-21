@@ -1,6 +1,6 @@
 {
   "meta": {
     "title": "Cloud Sync",
-    "description": "Back up skills, plugins, MCP servers, global instructions and optional credentials to any WebDAV server (Nutstore / Nextcloud / Synology / ownCloud / AList), and restore them on demand."
+    "description": "Back up skills, plugins, MCP servers, global instructions and optional credentials to any WebDAV server, and restore them on demand."
   }
 }

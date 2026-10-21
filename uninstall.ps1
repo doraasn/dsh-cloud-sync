@@ -11,11 +11,11 @@ if ($running) {
   exit 1
 }
 
-& $dsh plugin --profile $Profile remove '@local/dsh-cloud-sync'
+& $dsh plugin --profile $Profile remove 'dsh-cloud-sync'
 if ($LASTEXITCODE -ne 0) {
   Write-Host "⚠️ pnpm 卸载未成功，改用手工方式：" -ForegroundColor Yellow
   Write-Host "   编辑 $env:USERPROFILE\.dsh\profiles\$Profile\package.json"
-  Write-Host "   删掉 dependencies 里的 @local/dsh-cloud-sync 与 dsh.profile.bundles 里的同名项"
+  Write-Host "   删掉 dependencies 里的 dsh-cloud-sync 与 dsh.profile.bundles 里的同名项"
   exit 2
 }
 Write-Host "✅ 已卸载。插件自己的数据仍在 ~/.dsh/cloud-sync/（配置、备份目录），需要可手工删除。" -ForegroundColor Green
