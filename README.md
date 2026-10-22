@@ -18,10 +18,10 @@
 ## 安全模型
 
 - 默认**不含任何明文密钥**：`Authorization: Bearer xxx` 一律打码成 `Bearer __SECRET__`，`mcp/`、`.env`、`*credential*` 里的 `key = value` 也只在值"像真密钥"时打码（长度 ≥ 16、无 `$ % < {`）。
-- 打码过的位置记在 `manifest.json` 的 `placeholders` 里，`/csync pull` 会列出"需要重填"。
-- **恢复保护**：若本地文件已有真实密钥、而归档里只有 `__SECRET__` 占位符，该文件判为"密钥保护跳过"，**不会覆盖**本地真密钥（计划里显示为 `🔒`，不参与落盘）。
+- 处理过的位置记在 `manifest.json` 的 `placeholders` 里（含 `encrypted` 标记），`/csync pull` 会说明「已还原 N 处」或「需重填 N 处」。
+- **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里显示 `🔒`）。
 - 开启 `includeSecrets` 时，`.credentials.yaml` 以 **scrypt + AES-256-GCM** 密文进包，口令来自凭据槽 `CLOUD_SYNC_SECRET_PASSWORD`，不落任何文件。
-- 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`，以及单文件 > 4 MB 的素材（设置页「单文件上限」可调）。
+- 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；单文件默认不设上限。
 
 ## 安装（必须先完全退出 DSH）
 
@@ -55,7 +55,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 | 分组 | 内容 |
 |---|---|
 | 连接 | WebDAV 地址、账号、应用密码（+「保存密码」写入凭据槽） |
-| 同步范围 | 段落、远端目录、保留份数、单文件上限、是否加密备份凭据；改动后「保存配置」才高亮 |
+| 同步范围 | 段落、远端目录、是否加密备份凭据；改完自动保存 |
 | 远端快照 | 每份快照的 名称 / 大小 / 时间，逐条「预演恢复」 |
 
 动作区：**立即上传**（主按钮）、**预演打包**、**刷新快照**、**预演最新快照恢复**；恢复必须先预演，预演结果里再点「确认恢复到本地」。
@@ -94,8 +94,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 | `sections` | `skills,agentsSkills,mcp,instructions` | 同步段落 |
 | `exclude` | `[]` | 额外 glob 排除，如 `["artifact-template-*/**/assets/**"]` |
 | `excludeBinaries` | `true` | 排除 exe/dll/压缩包等 |
-| `maxFileBytes` | 4 MB | 单文件上限，0 = 不限 |
-| `keep` | 5 | 远端保留份数 |
+| `maxFileBytes` | 0 | 单文件上限，0 = 不限 |
+| `keep` | 5 | 远端保留份数（界面不暴露，prune 用） |
 | `includeSecrets` | `false` | 是否打包 `.credentials.yaml`（加密） |
 | `secretPasswordRef` | `CLOUD_SYNC_SECRET_PASSWORD` | 加密口令槽 |
 | `redact` | `true` | 是否打码明文密钥（关掉则按原样进包） |
@@ -109,7 +109,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 
 ## 已知限制
 
-1. 归档里被打码的密钥**不会**自动还原（占位符 `__SECRET__`），拉取后按提示重填。
-2. 默认不打包 > 4 MB 的技能素材（如 `artifact-template-*` 的 pptx/pb 模板）——需要就调大 `maxFileBytes` 或改用 `exclude` 精确控制。
+1. 密钥是否需要手填取决于口令：有口令则 `__ENC__` 令牌在恢复时自动还原；无口令则为 `__SECRET__`，需按提示重填。
+2. 单文件默认不设上限；WebDAV 服务端通常限制单文件 500 MB，超过仍需用 `exclude` 排除。
 3. 图形卡片挂在设置分区 `settings.section`；若该插槽在你的 profile 里不可用，会退化为侧栏底部入口。
 4. 恢复技能与 MCP 后需要重启 DSH 才完全生效。
