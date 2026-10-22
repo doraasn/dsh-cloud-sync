@@ -19,7 +19,7 @@
 
 - 默认**不含任何明文密钥**：`Authorization: Bearer xxx` 一律打码成 `Bearer __SECRET__`，`mcp/`、`.env`、`*credential*` 里的 `key = value` 也只在值"像真密钥"时打码（长度 ≥ 16、无 `$ % < {`）。
 - 处理过的位置记在 `manifest.json` 的 `placeholders` 里（含 `encrypted` 标记），`/csync pull` 会说明「已还原 N 处」或「需重填 N 处」。
-- **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里显示 `🔒`）。
+- **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里以 `!` 标记）。
 - 开启 `includeSecrets` 时，`.credentials.yaml` 以 **scrypt + AES-256-GCM** 密文进包，口令来自凭据槽 `CLOUD_SYNC_SECRET_PASSWORD`，不落任何文件。
 - 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；单文件默认不设上限。
 
