@@ -54,9 +54,21 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 
 | 分组 | 内容 |
 |---|---|
-| 连接 | WebDAV 地址、账号、应用密码（+「保存密码」写入凭据槽） |
-| 同步范围 | 段落、远端目录、是否加密备份凭据；改完自动保存 |
-| 远端快照 | 每份快照的 名称 / 大小 / 时间，逐条「预演恢复」 |
+| 连接 | WebDAV 地址、账号、应用密码（+「保存」写入凭据槽）、远端目录 |
+| 备份内容 | 六个开关，见下表；勾选即保存 |
+| 动作 | 立即上传、预览备份内容、预览恢复 |
+| 远端快照 | 每份快照的名称 / 大小 / 时间，逐条「预览恢复」 |
+
+「备份内容」各开关对应的实际路径：
+
+| 开关 | 内容 | 路径 |
+|---|---|---|
+| 本机技能（~/.dsh） | DSH 自有技能 | `$DSH_HOME/skills` |
+| 共享技能（~/.agents） | 多个工具共用的技能目录 | `$DSH_AGENTS_HOME/skills`（默认 `~/.agents/skills`） |
+| 插件与 MCP 配置项 | 插件清单、锁文件与 MCP server 行 | `profiles/<name>/` 下的 `cordis.patch.yml`、`cordis.yml`、`package.json`、`pnpm-workspace.yaml`、`pnpm-lock.yaml` |
+| 本地插件源码（link） | `link:` 依赖指向的插件源码（market 插件可从 registry 重装，不必打包） | 各 `link:` 目标目录 |
+| 全局指令（AGENTS.md） | 每次会话都会读取的全局指令 | `$DSH_HOME/AGENTS.md`、`$DSH_AGENTS_HOME/AGENTS.md` |
+| 模型凭据（加密） | 各模型 provider 的 API key | `$DSH_HOME/.credentials.yaml`（加密后进包） |
 
 动作区：**立即上传**（主按钮）、**预演打包**、**刷新快照**、**预演最新快照恢复**；恢复必须先预演，预演结果里再点「确认恢复到本地」。
 
