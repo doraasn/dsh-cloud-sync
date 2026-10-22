@@ -12,10 +12,12 @@ DSH 的插件市场是「索引源」模式，**没有全网搜索**：别人要
 2. 粘贴：
 
    ```text
-   https://raw.githubusercontent.com/doraasn/dsh-cloud-sync/main/market-index.json
+   https://raw.githubusercontent.com/doraasn/dsh-plugins-index/main/market-index.json
    ```
 
 3. 选中该市场，搜「云同步」或 `cloud-sync`，点安装。
+
+> 该索引同时收录 doraasn 名下的其他 DSH 插件（额度看板、Web Chat、移动访问设置）。
 
 **方式二：命令行直接装（git）**
 
@@ -25,7 +27,7 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 
 装完把 `dsh-cloud-sync` 加进该 profile `package.json` 的 `dsh.profile.bundles`，再重启 DSH（`install.ps1` 会自动做这两步）。
 
-> 尚未发布到 npm（`dsh-cloud-sync` 这个名字在 npm 上已被占用），所以走 git 源；如果自己 fork 后发到 npm，把 `market-index.json` 里 `source` 改成 `{"type":"npm"}` 即可。
+> 尚未发布到 npm（`dsh-cloud-sync` 这个名字在 npm 上已被占用），所以走 git 源。索引统一维护在 [dsh-plugins-index](https://github.com/doraasn/dsh-plugins-index)，本仓库不再放 `market-index.json`。
 
 ## 同步什么
 
