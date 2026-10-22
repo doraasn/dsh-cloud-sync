@@ -2,18 +2,43 @@
 
 把 DSH 的可移植配置备份 / 同步到**任意 WebDAV**（默认坚果云，也兼容 Nextcloud、群晖、ownCloud、AList），零第三方依赖。
 
+## 安装
+
+DSH 的插件市场是「索引源」模式，**没有全网搜索**：别人要用，需要把这个索引地址加进去，然后在市场里搜「云同步」。
+
+**方式一：加索引源（推荐）**
+
+1. DSH 打开 插件 → 发现 → 索引源 → 添加
+2. 粘贴：
+
+   ```text
+   https://raw.githubusercontent.com/doraasn/dsh-cloud-sync/main/market-index.json
+   ```
+
+3. 选中该市场，搜「云同步」或 `cloud-sync`，点安装。
+
+**方式二：命令行直接装（git）**
+
+```powershell
+dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.git#7c98449c892c857d190422b8b6e594241ea83a99"
+```
+
+装完把 `dsh-cloud-sync` 加进该 profile `package.json` 的 `dsh.profile.bundles`，再重启 DSH（`install.ps1` 会自动做这两步）。
+
+> 尚未发布到 npm（`dsh-cloud-sync` 这个名字在 npm 上已被占用），所以走 git 源；如果自己 fork 后发到 npm，把 `market-index.json` 里 `source` 改成 `{"type":"npm"}` 即可。
+
 ## 同步什么
 
 | 段落 | 来源 | 归档内前缀 |
 |---|---|---|
 | `skills` | `$DSH_HOME/skills` | `skills/` |
 | `agentsSkills` | `$DSH_AGENTS_HOME`（默认 `~/.agents`）`/skills` | `agents-skills/` |
-| `mcp` | `$DSH_HOME/profiles/<profile>/{cordis.patch.yml,package.json,pnpm-workspace.yaml}` | `mcp/` |
+| `mcp` | `$DSH_HOME/profiles/<profile>/` 下的 `cordis.patch.yml`（含 DSH 全局设置：模型 provider、权限预设、主题偏好）、`cordis.yml`、`package.json`、`pnpm-workspace.yaml`、`pnpm-lock.yaml` | `mcp/` |
+| `plugins` | profile 里所有 `link:` 依赖指向的插件源码（跳过 `node_modules`、`dist`） | `plugins/<包名>/` |
 | `instructions` | `$DSH_HOME/AGENTS.md`、`~/.agents/AGENTS.md` | `instructions/` |
-| `storages` | `$DSH_HOME/storages`（默认不含 `session_projcache`） | `storages/` |
-| 密钥 | `$DSH_HOME/.credentials.yaml`（需显式开启，加密后进包） | `secrets/.credentials.yaml.enc` |
+| 模型凭据 | `$DSH_HOME/.credentials.yaml`（需显式开启，加密后进包） | `secrets/.credentials.yaml.enc` |
 
-**会话历史、附件、`dsh-runtimes` 永不进包。**
+**会话历史、附件、`dsh-runtimes`、`node_modules`、`storages` 缓存永不进包。**
 
 ## 安全模型
 
