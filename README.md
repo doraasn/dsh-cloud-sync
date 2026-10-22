@@ -65,7 +65,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 |---|---|---|
 | 本机技能（~/.dsh） | DSH 自有技能 | `$DSH_HOME/skills` |
 | 共享技能（~/.agents） | 多个工具共用的技能目录 | `$DSH_AGENTS_HOME/skills`（默认 `~/.agents/skills`） |
-| 插件与 MCP 配置项 | 插件清单、锁文件与 MCP server 行 | `profiles/<name>/` 下的 `cordis.patch.yml`、`cordis.yml`、`package.json`、`pnpm-workspace.yaml`、`pnpm-lock.yaml` |
+| DSH 配置与插件清单 | DSH 全局设置（模型 provider、权限预设、主题偏好）、插件与 MCP 条目、锁文件 | `profiles/<name>/` 下的 `cordis.patch.yml`、`cordis.yml`、`package.json`、`pnpm-workspace.yaml`、`pnpm-lock.yaml` |
 | 本地插件源码（link） | `link:` 依赖指向的插件源码（market 插件可从 registry 重装，不必打包） | 各 `link:` 目标目录 |
 | 全局指令（AGENTS.md） | 每次会话都会读取的全局指令 | `$DSH_HOME/AGENTS.md`、`$DSH_AGENTS_HOME/AGENTS.md` |
 | 模型凭据（加密） | 各模型 provider 的 API key | `$DSH_HOME/.credentials.yaml`（加密后进包） |
