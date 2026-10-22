@@ -71,17 +71,17 @@
           "no-deps"
         ],
         "sortKeys": {
-          "added": 1792587459
+          "added": 1792639681
         }
       },
       "versions": [
         {
           "version": "0.1.0",
-          "publishTimestamp": 1792587459,
+          "publishTimestamp": 1792639681,
           "source": {
             "type": "git",
             "url": "https://github.com/doraasn/dsh-cloud-sync.git",
-            "commit": "9efa4266ea40b56cf0c2733204d3b45cd46817a0"
+            "commit": "0deee9df0e0ec1dccd26accb3ec6fe5a756eddc4"
           },
           "engines": {
             "dsh": ">=0.2.1-0"
