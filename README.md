@@ -75,6 +75,23 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 
 应用密码按服务生成：坚果云在「账户信息」的「安全选项」里新增「第三方应用管理」的应用密码；Nextcloud 在「设置」的「安全」里生成「设备专用密码」；群晖用账号密码或应用专用密码。
 
+## 自动同步
+
+设置页「自动同步」一行有三种模式，改完即生效（宿主每 30 秒读一次配置，不用重启）：
+
+| 模式 | 行为 |
+|---|---|
+| 关闭（默认） | 只能手动点上传 |
+| 定时 | 每 N 分钟检查一次；距上次推送（含手动）超过 N 分钟才推送 |
+| 改动后 | 监听技能目录、profile 配置、link 插件源码；最后一次改动后静默 N 秒才推送 |
+
+两条防重复机制：
+
+- **指纹比对**：推送前对「同步清单」（路径 + 字节数 + 修改时间）算 SHA1，与上次推送记录相同就直接跳过，不会把同样的 60MB 反复上传。
+- **首次基线**：「改动后」模式首次启用只记录基线不推送，避免一开开关就上传全量；「定时」模式没有基线则按周期正常推送。
+
+失败只写日志（`[cloud-sync]` 前缀），不打断会话，也不影响手动操作。自动推送与手动上传共用同一条链路，快照内容、保留策略、状态栏完全一致。
+
 ## 图形设置卡片
 
 装好后在「设置」里打开 **云同步**（`settings.section` 插槽）。卡片分四组：
@@ -135,6 +152,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 | `excludeBinaries` | `true` | 排除 exe/dll/压缩包等 |
 | `maxFileBytes` | 0 | 单文件上限，0 = 不限 |
 | `keep` | 5 | 远端保留份数（界面不暴露，prune 用） |
+| `autoSyncMode` | `off` | 自动同步模式：`off` / `interval` / `watch` |
+| `autoSyncMinutes` | 60 | 定时模式间隔（分钟） |
+| `autoSyncDebounceSeconds` | 90 | 改动模式防抖窗口（秒） |
 | `includeSecrets` | `false` | 是否打包 `.credentials.yaml`（加密） |
 | `secretPasswordRef` | `CLOUD_SYNC_SECRET_PASSWORD` | 加密口令槽 |
 | `redact` | `true` | 是否打码明文密钥（关掉则按原样进包） |
