@@ -1,48 +1,48 @@
-﻿{
-    "name":  "dsh-cloud-sync",
-    "version":  null,
-    "type":  "module",
-    "description":  "DeepSeek Harness plugin: back up skills, plugins, MCP config, AGENTS.md and optional encrypted credentials to any WebDAV server",
-    "license":  "MIT",
-    "keywords":  [
-                     "dsh",
-                     "dsh-plugin",
-                     "webdav",
-                     "backup",
-                     "sync"
-                 ],
-    "homepage":  "https://github.com/doraasn/dsh-cloud-sync",
-    "repository":  {
-                       "type":  "git",
-                       "url":  "git+https://github.com/doraasn/dsh-cloud-sync.git"
-                   },
-    "bugs":  {
-                 "url":  "https://github.com/doraasn/dsh-cloud-sync/issues"
-             },
-    "exports":  {
-                    ".":  "./lib/index.js",
-                    "./client":  "./lib/client.js",
-                    "./package.json":  "./package.json",
-                    "./locale/*.json":  "./locale/*.json",
-                    "./icon":  "./icon.svg"
-                },
-    "files":  [
-                  "lib/*.js",
-                  "cordis.patch.yml",
-                  "locale/*.json",
-                  "icon.svg",
-                  "README.md",
-                  "LICENSE"
-              ],
-    "dsh":  {
-                "bundle":  {
-                               "patch":  "./cordis.patch.yml"
-                           },
-                "client":  {
-                               "platform":  "web"
-                           }
-            },
-    "dependencies":  {
-                         "dsh-cloud-sync":  "github:doraasn/dsh-cloud-sync#47b180cb20387f84e29d7f31b202b6e365e3424b"
-                     }
+{
+  "name": "dsh-cloud-sync",
+  "version": "0.5.3",
+  "type": "module",
+  "description": "DeepSeek Harness plugin: back up skills, plugins, MCP config, AGENTS.md and optional encrypted credentials to any WebDAV server",
+  "license": "MIT",
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "webdav",
+    "backup",
+    "sync"
+  ],
+  "homepage": "https://github.com/doraasn/dsh-cloud-sync",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/doraasn/dsh-cloud-sync.git"
+  },
+  "bugs": {
+    "url": "https://github.com/doraasn/dsh-cloud-sync/issues"
+  },
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "lib/*.js",
+    "cordis.patch.yml",
+    "locale/*.json",
+    "icon.svg",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "dependencies": {
+    "dsh-cloud-sync": "github:doraasn/dsh-cloud-sync#47b180cb20387f84e29d7f31b202b6e365e3424b"
+  }
 }
