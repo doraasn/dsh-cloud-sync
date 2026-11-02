@@ -1,6 +1,6 @@
 {
   "name": "dsh-cloud-sync",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "type": "module",
   "description": "DeepSeek Harness plugin: back up skills, plugins, MCP config, AGENTS.md and optional encrypted credentials to any WebDAV server",
   "license": "MIT",
@@ -41,8 +41,5 @@
     "client": {
       "platform": "web"
     }
-  },
-  "dependencies": {
-    "dsh-cloud-sync": "github:doraasn/dsh-cloud-sync#47b180cb20387f84e29d7f31b202b6e365e3424b"
   }
 }
