@@ -55,7 +55,7 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
   3. `mcp/`、`.env`、`*credential*` 里的 `key = value`，只在值“像真密钥”时处理（长度 ≥ 16、无 `$ % < {`）。
 - 处理过的位置记在 `manifest.json` 的 `placeholders` 里（含 `encrypted` 标记），`/csync pull` 会说明「已还原 N 处」或「需重填 N 处」。
 - **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里以 `!` 标记）。
-- 开启 `includeSecrets` 时，`.credentials.yaml` 以 **scrypt + AES-256-GCM** 密文进包，口令来自凭据槽 `CLOUD_SYNC_SECRET_PASSWORD`，不落任何文件。
+- **加密口令与「凭据打包」是两件事**：只要凭据槽 `CLOUD_SYNC_SECRET_PASSWORD` 配了口令，文件内的密钥就一律用该口令加密成 `__ENC` 令牌、恢复时自动还原；`includeSecrets` 只控制要不要把 `.credentials.yaml` 本身也打进包（同样用 scrypt + AES-256-GCM）。
 - 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；不设单文件体积上限。
 
 ## 安装（必须先完全退出 DSH）
@@ -111,7 +111,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 | 分组 | 内容 |
 |---|---|
 | 连接 | WebDAV 地址、账号、应用密码（+「保存」写入凭据槽）、远端目录 |
-| 备份内容 | 六个开关，见下表；勾选即保存 |
+| 备份内容 | 段落开关 + 加密口令；勾选即保存 |
 | 动作 | 立即上传、预览备份内容、预览恢复 |
 | 远端快照 | 每份快照的名称 / 大小 / 时间，逐条「预览恢复」 |
 
