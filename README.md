@@ -53,6 +53,7 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
   1. `Authorization: Bearer xxx` 全文件替换；
   2. 已知令牌前缀（`sk-`、`ghp_`、`AKIA`、`AIza`、`xox?-`、`hf_`、`npm_`、`afxp_`、`sk-ant-`）**不区分文件位置**，命中即处理——覆盖 `storages/*.json` 这类插件状态文件里存的 key；
   3. `mcp/`、`.env`、`*credential*` 里的 `key = value`，只在值“像真密钥”时处理（长度 ≥ 16、无 `$ % < {`）。
+- 已经是 `__SECRET__` 占位符或 `__ENC:…__` 令牌的值**不会二次加密**（否则会变成「密文的密文」，永远解不出真值）。
 - 处理过的位置记在 `manifest.json` 的 `placeholders` 里（含 `encrypted` 标记），`/csync pull` 会说明「已还原 N 处」或「需重填 N 处」。
 - **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里以 `!` 标记）。
 > **口令丢失 = 加密内容不可恢复。** `__ENC` 令牌用 AES-256-GCM 加密，没有口令就无法解密；
