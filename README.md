@@ -38,6 +38,11 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 | `mcp` | `$DSH_HOME/profiles/<profile>/` 下的 `cordis.patch.yml`（含 DSH 全局设置：模型 provider、权限预设、主题偏好）、`cordis.yml`、`package.json`、`pnpm-workspace.yaml`、`pnpm-lock.yaml` | `mcp/` |
 | `plugins` | profile 里所有 `link:` 依赖指向的插件源码（跳过 `node_modules`、`dist`） | `plugins/<包名>/` |
 | `instructions` | `$DSH_HOME/AGENTS.md`、`~/.agents/AGENTS.md` | `instructions/` |
+| `storages` | `$DSH_HOME/storages`（排除 `session_projcache`） | `storages/` |
+| `memories` | `$DSH_HOME/memories`（跨会话记忆库） | `memories/` |
+| `localPlugins` | `$DSH_HOME/local-plugins`（从本地路径安装的插件副本） | `local-plugins/` |
+| `skillLock` | `~/.agents/.skill-lock.json`（技能来源清单） | `agents/` |
+| `profiles` | 其余 profile 的配置文件（`cordis.patch.yml` 等 5 个） | `profiles/<name>/` |
 | 模型凭据 | `$DSH_HOME/.credentials.yaml`（需显式开启，加密后进包） | `secrets/.credentials.yaml.enc` |
 
 **会话历史、附件、`dsh-runtimes`、`node_modules`、`storages` 缓存永不进包。**
@@ -74,6 +79,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 ```
 
 应用密码按服务生成：坚果云在「账户信息」的「安全选项」里新增「第三方应用管理」的应用密码；Nextcloud 在「设置」的「安全」里生成「设备专用密码」；群晖用账号密码或应用专用密码。
+
+## 进度与状态
+
+上传/恢复进行中会显示阶段与计时。关闭设置面板再打开、或在别的入口触发动作时，设置页会用服务端进度自动接管显示（常驻 1.5 秒轮询），不会回到「什么都没发生」的状态。
 
 ## 自动同步
 
