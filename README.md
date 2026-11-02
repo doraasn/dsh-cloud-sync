@@ -62,6 +62,7 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 >
 > `includeSecrets` 只决定要不要把 `.credentials.yaml` 本身也打进包；关闭它不影响 `__ENC` 令牌的生成与还原。
 
+- **口令合一 = 同信任边界**：口令即 WebDAV 应用密码，所以凡是能访问这份 WebDAV 的人（服务商运维、共享账号的协作者）都能解开快照里的密钥。这不是新增漏洞，而是「传输口令与加密口令复用」的必然结果；若以后支持把归档传到第三方对象存储，不要再复用传输口令。
 - **加密口令默认就是 WebDAV 应用密码**：文件内的密钥用该口令加密成 `__ENC` 令牌，恢复时自动还原，无需单独设置。凭据槽 `CLOUD_SYNC_SECRET_PASSWORD` 仅作为可选覆盖（默认为空）。`includeSecrets` 只控制要不要把 `.credentials.yaml` 本身也打进包（同样用 scrypt + AES-256-GCM）。
 - 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；不设单文件体积上限。
 
