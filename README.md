@@ -58,11 +58,11 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 - **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里以 `!` 标记）。
 > **口令丢失 = 加密内容不可恢复。** `__ENC` 令牌用 AES-256-GCM 加密，没有口令就无法解密；
 > 恢复时若口令不匹配：本地已有真实值的文件判为「保护跳过」，既不覆盖也不改动；本地缺失的文件会写入 `__SECRET__` 占位符（提示你手填），不会把密文原样落盘。
-> 更换口令后，**旧快照只能用旧口令恢复**；需要可迁移的备份就保留旧口令或在换口令前重新上传一份。
+> 由于口令即 WebDAV 应用密码，**在坚果云改密码后，旧快照只能用旧密码恢复**；改密码前先重新上传一份。
 >
 > `includeSecrets` 只决定要不要把 `.credentials.yaml` 本身也打进包；关闭它不影响 `__ENC` 令牌的生成与还原。
 
-- **加密口令与「凭据打包」是两件事**：只要凭据槽 `CLOUD_SYNC_SECRET_PASSWORD` 配了口令，文件内的密钥就一律用该口令加密成 `__ENC` 令牌、恢复时自动还原；`includeSecrets` 只控制要不要把 `.credentials.yaml` 本身也打进包（同样用 scrypt + AES-256-GCM）。
+- **加密口令默认就是 WebDAV 应用密码**：文件内的密钥用该口令加密成 `__ENC` 令牌，恢复时自动还原，无需单独设置。凭据槽 `CLOUD_SYNC_SECRET_PASSWORD` 仅作为可选覆盖（默认为空）。`includeSecrets` 只控制要不要把 `.credentials.yaml` 本身也打进包（同样用 scrypt + AES-256-GCM）。
 - 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；不设单文件体积上限。
 
 ## 安装（必须先完全退出 DSH）
