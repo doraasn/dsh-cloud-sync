@@ -49,11 +49,14 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 
 ## 安全模型
 
-- 默认**不含任何明文密钥**：`Authorization: Bearer xxx` 一律打码成 `Bearer __SECRET__`，`mcp/`、`.env`、`*credential*` 里的 `key = value` 也只在值"像真密钥"时打码（长度 ≥ 16、无 `$ % < {`）。
+- 默认**不含任何明文密钥**，三类规则：
+  1. `Authorization: Bearer xxx` 全文件替换；
+  2. 已知令牌前缀（`sk-`、`ghp_`、`AKIA`、`AIza`、`xox?-`、`hf_`、`npm_`、`afxp_`、`sk-ant-`）**不区分文件位置**，命中即处理——覆盖 `storages/*.json` 这类插件状态文件里存的 key；
+  3. `mcp/`、`.env`、`*credential*` 里的 `key = value`，只在值“像真密钥”时处理（长度 ≥ 16、无 `$ % < {`）。
 - 处理过的位置记在 `manifest.json` 的 `placeholders` 里（含 `encrypted` 标记），`/csync pull` 会说明「已还原 N 处」或「需重填 N 处」。
 - **恢复保护**：没有口令解不开的 `__ENC__` 令牌、或只有 `__SECRET__` 占位符时，若本地已有真实密钥就判为"密钥保护跳过"，**不会覆盖**本地真值（计划里以 `!` 标记）。
 - 开启 `includeSecrets` 时，`.credentials.yaml` 以 **scrypt + AES-256-GCM** 密文进包，口令来自凭据槽 `CLOUD_SYNC_SECRET_PASSWORD`，不落任何文件。
-- 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；单文件默认不设上限。
+- 默认排除 `**/node_modules/**`、`**/.git/**`、`*.exe/*.dll/...`；不设单文件体积上限。
 
 ## 安装（必须先完全退出 DSH）
 
@@ -159,7 +162,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 | `sections` | `skills,agentsSkills,mcp,instructions` | 同步段落 |
 | `exclude` | `[]` | 额外 glob 排除，如 `["artifact-template-*/**/assets/**"]` |
 | `excludeBinaries` | `true` | 排除 exe/dll/压缩包等 |
-| `maxFileBytes` | 0 | 单文件上限，0 = 不限 |
 | `keep` | 5 | 远端保留份数（界面不暴露，prune 用） |
 | `autoSyncMode` | `off` | 自动同步模式：`off` / `interval` / `watch` |
 | `autoSyncMinutes` | 60 | 定时模式间隔（分钟） |
@@ -178,6 +180,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 ## 已知限制
 
 1. 密钥是否需要手填取决于口令：有口令则 `__ENC__` 令牌在恢复时自动还原；无口令则为 `__SECRET__`，需按提示重填。
-2. 单文件默认不设上限；WebDAV 服务端通常限制单文件 500 MB，超过仍需用 `exclude` 排除。
+2. 不再有单文件体积上限；WebDAV 服务端通常限制单文件 500 MB，超过仍需用 `exclude` 排除。
 3. 图形卡片挂在设置分区 `settings.section`；若该插槽在你的 profile 里不可用，会退化为侧栏底部入口。
 4. 恢复技能与 MCP 后需要重启 DSH 才完全生效。
