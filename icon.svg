@@ -1,12 +1,14 @@
-<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cloud Sync">
+﻿<svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cloud Sync">
+  <g transform="translate(18 18) scale(0.88) translate(-18 -18)">
   <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96Z" transform="translate(7 6.8) scale(0.92)" fill="url(#cs-cloud)" />
   <path d="M15.3 21.4v-7" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" />
   <path d="m12.9 16.7 2.4-2.4 2.4 2.4" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
   <path d="M20.7 14.6v7" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" />
   <path d="m18.3 19.3 2.4 2.4 2.4-2.4" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
   <defs>
     <linearGradient id="cs-cloud" x1="10" y1="8" x2="26" y2="22" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#6FA9FF" />
+      <stop stop-color="#63A6FF" />
       <stop offset="1" stop-color="#0F4FE0" />
     </linearGradient>
   </defs>
