@@ -180,6 +180,13 @@ check('lock 归为派生文件', isDerivedManifest('/p/profiles/desktop/pnpm-loc
 check('workspace 归为派生文件', isDerivedManifest('/p/profiles/desktop/pnpm-workspace.yaml') === true)
 check('package.json 不是派生文件', isDerivedManifest('/p/profiles/desktop/package.json') === false)
 
+// ---- 13. 技能脚本默认不随快照恢复 ----
+const { isSkillScript } = await import(new URL('../lib/restore.js', import.meta.url).href)
+check('技能脚本被识别', isSkillScript('/h/.dsh/skills/foo/scripts/a.mjs') === true)
+check('技能说明不被拦', isSkillScript('/h/.dsh/skills/foo/SKILL.md') === false)
+check('skills 之外的脚本不被拦', isSkillScript('/h/.dsh/temp/a.mjs') === false)
+check('Windows 分隔符同样识别', isSkillScript('C:\\Users\\x\\.dsh\\skills\\foo\\run.ps1') === true)
+
 fs.rmSync(HOME, { recursive: true, force: true })
 console.log(`\n结果: ${passed} 通过 / ${failed} 失败`)
 process.exitCode = failed === 0 ? 0 : 1
