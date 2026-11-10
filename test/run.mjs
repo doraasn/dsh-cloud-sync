@@ -162,6 +162,14 @@ check('丢弃外部 github 依赖', !('evil' in dirty.manifest.dependencies) && 
 check('丢弃 npm 版本区间', !('npm-evil' in dirty.manifest.dependencies))
 check('bundles 只留内建与已保留依赖', JSON.stringify(dirty.manifest.dsh.profile.bundles) === JSON.stringify(['@deepseek-ai/dsh-base', 'ok-link']))
 
+// ---- 11. profile 配置不得把监听地址改成对外 ----
+const { profileConfigRisk } = await import(new URL('../lib/restore.js', import.meta.url).href)
+const yml = (body) => Buffer.from(body, 'utf8')
+check('0.0.0.0 判为风险', Boolean(profileConfigRisk('/p/profiles/desktop/cordis.patch.yml', yml('plugins:\n  x:\n    config:\n      host: 0.0.0.0\n'))))
+check('局域网 IP 判为风险', Boolean(profileConfigRisk('/p/profiles/desktop/cordis.patch.yml', yml('webServer:\n  host: 192.168.1.5\n'))))
+check('回环地址放行', profileConfigRisk('/p/profiles/desktop/cordis.patch.yml', yml('webServer:\n  host: 127.0.0.1\n')) === null)
+check('非 cordis 文件不检查', profileConfigRisk('/p/profiles/desktop/package.json', yml('{"host":"0.0.0.0"}')) === null)
+
 fs.rmSync(HOME, { recursive: true, force: true })
 console.log(`\n结果: ${passed} 通过 / ${failed} 失败`)
 process.exitCode = failed === 0 ? 0 : 1
