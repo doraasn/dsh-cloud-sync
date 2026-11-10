@@ -170,6 +170,16 @@ check('局域网 IP 判为风险', Boolean(profileConfigRisk('/p/profiles/deskto
 check('回环地址放行', profileConfigRisk('/p/profiles/desktop/cordis.patch.yml', yml('webServer:\n  host: 127.0.0.1\n')) === null)
 check('非 cordis 文件不检查', profileConfigRisk('/p/profiles/desktop/package.json', yml('{"host":"0.0.0.0"}')) === null)
 
+// ---- 12. cordis 配置的行内写法与派生文件 ----
+check('行内映射里的 0.0.0.0 也拦', Boolean(profileConfigRisk('/p/profiles/desktop/cordis.yml', yml('webServer: {host: 0.0.0.0, port: 59681}\n'))))
+check('行内映射里的外部 IP 也拦', Boolean(profileConfigRisk('/p/profiles/desktop/cordis.yml', yml('webServer: { host: "10.0.0.8" }\n'))))
+check('回环带端口放行', profileConfigRisk('/p/profiles/desktop/cordis.yml', yml('webServer: {host: 127.0.0.1:59681}\n')) === null)
+
+const { isDerivedManifest } = await import(new URL('../lib/restore.js', import.meta.url).href)
+check('lock 归为派生文件', isDerivedManifest('/p/profiles/desktop/pnpm-lock.yaml') === true)
+check('workspace 归为派生文件', isDerivedManifest('/p/profiles/desktop/pnpm-workspace.yaml') === true)
+check('package.json 不是派生文件', isDerivedManifest('/p/profiles/desktop/package.json') === false)
+
 fs.rmSync(HOME, { recursive: true, force: true })
 console.log(`\n结果: ${passed} 通过 / ${failed} 失败`)
 process.exitCode = failed === 0 ? 0 : 1
