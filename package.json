@@ -1,6 +1,6 @@
 {
   "name": "dsh-cloud-sync",
-  "version": "0.5.10",
+  "version": "0.5.11",
   "type": "module",
   "description": "DeepSeek Harness plugin: back up skills, plugins, MCP config, AGENTS.md and optional encrypted credentials to any WebDAV server",
   "license": "MIT",
@@ -32,7 +32,8 @@
     "locale/*.json",
     "icon.svg",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "test/"
   ],
   "dsh": {
     "bundle": {
@@ -41,5 +42,8 @@
     "client": {
       "platform": "web"
     }
+  },
+  "scripts": {
+    "test": "node test/run.mjs"
   }
 }
