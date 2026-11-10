@@ -150,6 +150,18 @@ check('state 不含 passwordRef', !('passwordRef' in snapshot.config))
 check('state 不含 secretPasswordRef', !('secretPasswordRef' in snapshot.config))
 check('state 仍保留设置页要用的字段', ['baseUrl', 'username', 'remoteDir', 'sections'].every((key) => key in snapshot.config))
 
+// ---- 10. profile 清单收敛：拒绝快照注入任意依赖 ----
+const { sanitizeProfileManifest } = await import(new URL('../lib/restore.js', import.meta.url).href)
+const dirty = sanitizeProfileManifest({
+  dependencies: { 'ok-link': 'link:../x', 'ok-gh': 'github:doraasn/dsh-guard#abc', evil: 'github:attacker/evil', 'npm-evil': '^1.2.3' },
+  dsh: { profile: { bundles: ['@deepseek-ai/dsh-base', 'ok-link', 'evil', 'ghost'] } },
+})
+check('保留 link: 依赖', dirty.manifest.dependencies['ok-link'] === 'link:../x')
+check('保留本组织 github 依赖', String(dirty.manifest.dependencies['ok-gh']).startsWith('github:doraasn/'))
+check('丢弃外部 github 依赖', !('evil' in dirty.manifest.dependencies) && dirty.dropped.some((item) => item.includes('evil')))
+check('丢弃 npm 版本区间', !('npm-evil' in dirty.manifest.dependencies))
+check('bundles 只留内建与已保留依赖', JSON.stringify(dirty.manifest.dsh.profile.bundles) === JSON.stringify(['@deepseek-ai/dsh-base', 'ok-link']))
+
 fs.rmSync(HOME, { recursive: true, force: true })
 console.log(`\n结果: ${passed} 通过 / ${failed} 失败`)
 process.exitCode = failed === 0 ? 0 : 1
