@@ -45,6 +45,8 @@ dsh plugin --profile desktop add "git+https://github.com/doraasn/dsh-cloud-sync.
 | `profiles` | 其余 profile 的配置文件（`cordis.patch.yml` 等 5 个） | `profiles/<name>/` |
 | 模型凭据 | `$DSH_HOME/.credentials.yaml`（需显式开启，加密后进包） | `secrets/.credentials.yaml.enc` |
 
+> 注意：这类凭据会加密进快照，但**恢复时不会写回**（见文末「已知限制」第 5 条）。不要把快照当密钥备份。
+
 **会话历史、附件、`dsh-runtimes`、`node_modules`、`storages` 缓存永不进包。**
 
 ## 安全模型
@@ -204,3 +206,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\verify.ps1
 2. 不再有单文件体积上限；WebDAV 服务端通常限制单文件 500 MB，超过仍需用 `exclude` 排除。
 3. 图形卡片挂在设置分区 `settings.section`；若该插槽在你的 profile 里不可用，会退化为侧栏底部入口。
 4. 恢复技能与 MCP 后需要重启 DSH 才完全生效。
+5. 整包加密的凭据负载（`secrets/.credentials.yaml.enc`）不会随恢复写回（`secrets/*` 被跳过），恢复时会明确提示——不要把快照当密钥备份。

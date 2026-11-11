@@ -187,6 +187,34 @@ check('技能说明不被拦', isSkillScript('/h/.dsh/skills/foo/SKILL.md') === 
 check('skills 之外的脚本不被拦', isSkillScript('/h/.dsh/temp/a.mjs') === false)
 check('Windows 分隔符同样识别', isSkillScript('C:\\Users\\x\\.dsh\\skills\\foo\\run.ps1') === true)
 
+
+// ---- 14. 加密凭据负载：不恢复，但必须在计划里明说 ----
+{
+  const { planRestore, formatPlan } = await import(new URL('../lib/restore.js', import.meta.url).href)
+  const { sha256 } = await import(new URL('../lib/sections.js', import.meta.url).href)
+  const secretBody = Buffer.from(JSON.stringify({ v: 1, cipher: 'aes-256-gcm', data: 'x' }))
+  const bundle = packTarGz([
+    {
+      path: 'manifest.json',
+      data: Buffer.from(
+        JSON.stringify({
+          schemaVersion: 1,
+          files: [{ path: 'secrets/.credentials.yaml.enc', bytes: secretBody.length, sha256: sha256(secretBody) }],
+          sections: { secrets: { files: 1, bytes: secretBody.length, encrypted: true } },
+        }),
+      ),
+    },
+    { path: 'secrets/.credentials.yaml.enc', data: secretBody },
+  ])
+  const plan = planRestore(bundle, { dshHome: HOME, agentsHome: HOME, profile: 'desktop' })
+  check('加密凭据负载被识别', plan.secretsEncrypted === true, String(plan.secretsEncrypted))
+  check('加密凭据不进入恢复条目', plan.items.every((item) => !item.path.startsWith('secrets/')))
+  check('计划文案明确提示密钥不恢复', formatPlan(plan).includes('密钥需重新配置'), formatPlan(plan).split('\n').slice(-3).join(' | '))
+  // 真正执行时也要能看到，而不是只有预演提示
+  const { applyRestore } = await import(new URL('../lib/restore.js', import.meta.url).href)
+  const applied = applyRestore(plan, { backupRoot: HOME })
+  check('执行结果标记加密凭据未恢复', applied.secretsSkipped === true, String(applied.secretsSkipped))
+}
 fs.rmSync(HOME, { recursive: true, force: true })
 console.log(`\n结果: ${passed} 通过 / ${failed} 失败`)
 process.exitCode = failed === 0 ? 0 : 1
